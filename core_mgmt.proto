@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package coremgmt;
+option go_package = ".;coremgmt";
+
+import "libresp_proto/msg-response.proto";
+
+message RoleForAccountRequest {
+	//@inject_tag:validate:"required"
+	string accountId = 1;
+	//@inject_tag:validate:"required"
+	repeated string roleIds = 2;
+	//@inject_tag:validate:"required"
+	string createdBy = 3;
+}
+
+message BizElementForRoleRequest {
+	//@inject_tag:validate:"required"
+	string roleId = 1;
+	// BizElement类型，单个Element还是Element组（ITEM/GROUP）
+	//@inject_tag:validate:"required"
+	string type = 2;
+	repeated string bizElementIds = 3;
+	repeated string bizElementGrpIds = 4;
+	//@inject_tag:validate:"required"
+	string createdBy = 5;
+}
+
+service CoreMgmt {
+	// 账号添加角色
+	rpc AddRoleForAccount(RoleForAccountRequest) returns (libresp.JsonResponse) {}
+	// 角色添加业务元素
+	rpc AddBizElementForRole(BizElementForRoleRequest) returns (libresp.JsonResponse) {}
+	// 角色添加业务元素组
+	rpc AddBizElementGroupForRole(BizElementForRoleRequest) returns (libresp.JsonResponse) {}
+}
+

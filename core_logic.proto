@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package coremgmt;
+option go_package = ".;coremgmt";
+
+import "libresp_proto/msg-response.proto";
+
+message LogicGroupRequest {
+    //@inject_tag:validate:"required"
+    string accountId = 1;
+    string parentId = 2;
+    //@inject_tag:validate:"required"
+    string type = 3;
+    //@inject_tag:validate:"required"
+    string logicGroupCode = 4;
+    //@inject_tag:validate:"required"
+    string logicGroupName = 5;
+    string desc = 6;
+    //@inject_tag:validate:"required"
+    string createdBy = 7;
+}
+
+message LogicGrpForAccountRequest {
+    string accountId = 1;
+    string createdBy = 2;
+    repeated string logicGroupIds = 3;
+}
+
+message LogicGrpForBusinessRequest {
+    string businessId = 1;
+    string createdBy = 2;
+    repeated string logicGroupIds = 3;
+}
+
+service CoreLogic {
+    // 创建逻辑分组
+    rpc CreateLogicGroup(LogicGroupRequest) returns (libresp.GenericResponse) {}
+    // 账号添加逻辑分组
+    rpc AddLogicGroupForAccount(LogicGrpForAccountRequest) returns (libresp.JsonResponse) {}
+    // 业务添加逻辑分组
+    rpc AddLogicGroupForBusiness(LogicGrpForBusinessRequest) returns (libresp.JsonResponse) {}
+}
+
+message LogicGroupResponse {
+    string accountId = 1;
+    string parentId = 2;
+    string type = 3;
+    string logicGroupCode = 4;
+    string logicGroupName = 5;
+    string desc = 6;
+    string createdBy = 7;
+    string updatedBy = 8;
+    string deletedBy = 9;
+}

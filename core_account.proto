@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package coremgmt;
+option go_package = ".;coremgmt";
+
+import "libresp_proto/msg-response.proto";
+
+message LoginRequest {
+  //@inject_tag:validate:"required"
+  string loginType = 1;
+  //@inject_tag:validate:"required"
+  string username = 2;
+  //@inject_tag:validate:"required"
+  string password = 3;
+}
+
+message SaveAccountRequest {
+  string id = 1;
+  string parentId = 2;
+  string parentEmail = 3;
+  //@inject_tag:validate:"required"
+  string accountType = 4;  // 主账号or子账号
+  //@inject_tag:validate:"required"
+  string accountFrom = 5; // 账号来源(机构or个人)
+  string deptCode = 6;
+  string deptName = 7;
+  //@inject_tag:validate:"required"
+  string username = 8; // 用户名
+  string password = 9; // 密码
+  string gender = 10;
+  string phone = 11;
+  string email = 12;
+  string avatarUrl = 13;
+  string createdBy = 14;
+}
+
+service CoreAccount {
+  // 登录
+  rpc Login(LoginRequest) returns (libresp.GenericResponse) {}
+  // 新增或修改账号信息
+  rpc SaveAccount(SaveAccountRequest) returns (libresp.GenericResponse) {}
+}
+
+message SaveAccountResponse {
+  string id = 1;
+}
+
+message AccountResponse {
+  string id = 1;
+  string parentId = 2;
+  string parentEmail = 3;
+  string accountType = 4;  // 主账号or子账号
+  string accountFrom = 5; // 账号来源(机构or个人)
+  string deptCode = 6;
+  string deptName = 7;
+  string username = 8; // 负责人信息
+  string password = 9;
+  string gender = 10;
+  string phone = 11;
+  string email = 12;
+  string avatarUrl = 13;
+}
+
+message LoginResponse {
+  string token = 1;
+}
+
+

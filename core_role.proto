@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package coremgmt;
+option go_package = ".;coremgmt";
+
+import "libresp_proto/msg-response.proto";
+
+message CreateRoleRequest {
+    //@inject_tag:validate:"required"
+	string accountIdFk = 1;
+	//@inject_tag:validate:"required"
+	string roleCode = 2;
+	//@inject_tag:validate:"required"
+	string roleName = 3;
+	string desc = 4;
+	string createdBy = 5;
+}
+
+service CoreRole {
+    // 创建角色
+    rpc CreateRole(CreateRoleRequest) returns (libresp.GenericResponse) {}
+    // 查询角色
+    // rpc FindRole() returns (libresp.GenericResponse) {}
+    // 删除角色
+    // rpc DeleteRole() returns (libresp.GenericResponse) {}
+}
+
+message RoleResponse {
+    string id = 1;
+    string accountFkId = 2;
+    string roleCode = 3;
+    string roleName = 4;
+    string desc = 5;
+}

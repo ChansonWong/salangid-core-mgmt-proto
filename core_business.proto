@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package coremgmt;
+option go_package = ".;coremgmt";
+
+import "libresp_proto/msg-response.proto";
+import "google/protobuf/timestamp.proto";
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+message RegisterBusinessRequest {
+    //@inject_tag:validate:"required"
+    string accountId = 1;
+    //@inject_tag:validate:"required"
+    string businessType = 2;
+    //@inject_tag:validate:"required"
+    string businessCode = 3;
+    //@inject_tag:validate:"required"
+    string businessName = 4;
+    string desc = 5;
+    //@inject_tag:validate:"required"
+    string createdBy = 6;
+}
+
+message BusinessIdRequest {
+    //@inject_tag:validate:"required"
+    string id = 1;
+}
+
+// Biz为Business缩写
+message BizLoginRequest {
+    //@inject_tag:validate:"required"
+    string appid = 1;
+    //@inject_tag:validate:"required"
+    string secret = 2;
+}
+
+message BizEleRequest {
+    string parentId = 1;
+    //@inject_tag:validate:"required"
+    string businessIdFk = 2;
+    //@inject_tag:validate:"required"
+    string elementType = 3;
+    //@inject_tag:validate:"required"
+    string elementCode = 4;
+    //@inject_tag:validate:"required"
+    string elementName = 5;
+    string desc = 6;
+    string createdBy = 7;
+}
+
+message DelBizEleRequest {
+    //@inject_tag:validate:"required"
+    string elementId = 1;
+}
+
+message BizElementGroupRequest {
+    string elementGrpCode = 1;
+    string elementGrpName = 2;
+    string desc = 3;
+    string createdBy = 4;
+}
+
+message BizElementGroupMappingRequest {
+    //@inject_tag:validate:"required"
+    string businessId = 1;
+    //@inject_tag:validate:"required"
+    repeated string elementGroupIds = 2;
+    //@inject_tag:validate:"required"
+    string createdBy = 3;
+}
+
+service CoreBusiness {
+    // 注册业务应用信息
+    rpc RegisterBusiness(RegisterBusinessRequest) returns (libresp.GenericResponse) {}
+    // 查询业务信息
+    rpc FindBusiness(BusinessIdRequest) returns (libresp.GenericResponse) {}
+    // 生成业务AppSecret
+    rpc GetAppSecret(BusinessIdRequest) returns (libresp.GenericResponse) {}
+    // 业务应用登录或刷新
+    rpc BusinessLogin(BizLoginRequest) returns (libresp.GenericResponse) {}
+    // 创建业务元素
+    rpc CreateBusinessElement(BizEleRequest) returns (libresp.GenericResponse) {}
+    // 删除业务元素
+    rpc DeleteBusinessElement(DelBizEleRequest) returns (libresp.GenericResponse) {}
+    // 创建业务元素组
+    rpc CreateBusinessElementGroup(BizElementGroupRequest) returns (libresp.GenericResponse) {}
+    // 业务添加业务员组关联
+    rpc AddElementGroupForBusiness(BizElementGroupMappingRequest) returns (libresp.JsonResponse) {}
+}
+
+// 业务查询返回
+message BusinessResponse {
+    string accountIdFk = 1;
+    string businessType = 2;
+    string businessCode = 3;
+    string businessName = 4;
+    string status = 5;
+    string appid = 6;
+    string desc = 8;
+    google.protobuf.Timestamp confirmAt = 9 [
+        (gogoproto.stdtime) = true
+    ];
+    string createdBy = 10;
+    string updatedBy = 11;
+    string deletedBy = 12;
+}
+
+// 业务appSecret
+message BusinessAppSecretResponse {
+    string appSecret = 1;
+}
+
+// 登录成功后获取的消息
+message BizLoginResponse {
+    string access_token = 1;
+    int32 expires_in = 2;
+}
+
+message BizElementResponse {
+    string id = 1;
+    string parentId = 2;
+    string businessIdFk = 3;
+    string elementType = 4;
+    string elementCode = 5;
+    string elementName = 6;
+    string elementDesc = 7;
+    string createBy = 8;
+}
+
+message BizElementGroupResponse {
+    string id = 1;
+    string elementGroupCode = 2;
+    string elementGroupName = 3;
+    string desc = 4;
+    string status = 5;
+}
